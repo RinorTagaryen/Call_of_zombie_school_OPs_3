@@ -45,13 +45,13 @@ m_collider = collider()
 class Zombie(Actor):
     def __init__(self, path):
         Actor.__init__(self, path)
-        colliders = m_collider.check(self)
-        len_col = len(colliders)
-        if len_col > 1:
-            print("ERROR")
+        self.half_size[0] = self.getWidth(0)/2
+        self.half_size[1] = self.getHeight(0)/2
         
+    half_size = [0,0]
+    
     def act(self):
-        self.move()
+        self.move(1)
     
     def getPos(self):
         return [self.getX(), self.getY()]
@@ -61,7 +61,7 @@ class Zombie(Actor):
         
 class Human(Actor):
     def __init__(self):
-        Actor.__init__(self,"C:\Users\Rebecca\Downloads\Bilder\guywithgun.gif")
+        Actor.__init__(self,"sprites/guywithgun.gif")
         self.half_size[0] = self.getWidth(0)/2
         self.half_size[1] = self.getHeight(0)/2
     
@@ -71,18 +71,20 @@ class Human(Actor):
         
 class Bullet(Actor):
     def __init__(self):
-        Actor.__init__(self, "C:\Users\Rebecca\Downloads\Bilder\Orb.gif" )
-        half_size = [0,0]
-        colliders = m_collider.check(self)
-        len_col = len(colliders)
-        if len_col > 1:
-            print("ERROR")
+        Actor.__init__(self, "sprites/Orb.gif")
+        self.half_size[0] = self.getWidth(0)/2
+        self.half_size[1] = self.getHeight(0)/2
+    
+    half_size = [0,0]
         
     def act(self):
-        self.move()
+        colliders = m_collider.check(self)
+        for idx, obj in enumerate(colliders):
+            obj.hide()
+        self.move(100)
     
     def getPos(self):
-        return self.pos
+        return [self.getX(), self.getY()]
     
 
 
@@ -90,7 +92,7 @@ class Bullet(Actor):
 def initZombies():
     for i in range(20):   
         for i in range(2):
-            zombie = Zombie("C:\Users\Rebecca\Downloads\Bilder\zombie" + str(i) + ".jpg")
+            zombie = Zombie("sprites/zombie" + str(i) + ".jpg")
             Y = randint(0, 600)
             addActor(zombie, Location(800, Y), 180)
             m_collider.add(zombie)
@@ -110,13 +112,12 @@ def onKeyRepeated(keyCode):
         human.setY(human.getY() + 5)
     elif keyCode == 32:#shoot
         bullet = Bullet()
-        m_collider.add(bullet)
         addActor(bullet, Location(human.getX(), human.getY()), 0)
             
         
 makeGameGrid(800, 600, 1, None, "sprites/lane.gif", False, keyRepeated = onKeyRepeated)
 setSimulationPeriod(50)
-#initZombies()
+initZombies()
 human = Human()
 addActor(human, Location(0, 300), 0)
 show()
