@@ -2,18 +2,6 @@ from gamegrid import *
 from random import randint
 
 
-#####class#####
-
-####C:\Users\Rebecca\Downloads\Bilder\zombie2.jpg
-
-####C:\Users\Rebecca\Downloads\Bilder\zombie1.jpg
-
-####C:\Users\Rebecca\Downloads\Bilder\guywithgun.gif
-
-####C:\Users\Rebecca\Downloads\Bilder\tomato.png
-
-####C:\Users\Rebecca\Downloads\Bilder\Orb.gif
-
 
 class collider:
     objects = []
@@ -81,17 +69,20 @@ class Bullet(Actor):
         colliders = m_collider.check(self)
         for idx, obj in enumerate(colliders):
             obj.hide()
-        self.move(100)
+            removeActor(self)
+        self.move(25)
     
     def getPos(self):
         return [self.getX(), self.getY()]
+       
+            
     
 
 
 
 def initZombies():
     for i in range(20):   
-        for i in range(2):
+        for i in range(3):
             zombie = Zombie("sprites/zombie" + str(i) + ".jpg")
             Y = randint(0, 600)
             addActor(zombie, Location(800, Y), 180)
@@ -113,6 +104,8 @@ def onKeyRepeated(keyCode):
     elif keyCode == 32:#shoot
         bullet = Bullet()
         addActor(bullet, Location(human.getX(), human.getY()), 0)
+
+
             
         
 makeGameGrid(800, 600, 1, None, "sprites/lane.gif", False, keyRepeated = onKeyRepeated)
@@ -120,6 +113,7 @@ setSimulationPeriod(50)
 initZombies()
 human = Human()
 addActor(human, Location(0, 300), 0)
+#wrap()
 show()
 doRun()
     
