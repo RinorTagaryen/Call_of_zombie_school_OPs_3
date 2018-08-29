@@ -56,6 +56,16 @@ class Human(Actor):
     half_size = [0,0]
     def getPos(self):
         return [self.getX(), self.getY()]
+    
+    def act(self):
+        if self.getX() > 650:
+            self.setX(650)
+        if self.getX() < 150:
+            self.setX(150)
+        if self.getY() > 450:
+            self.setY(450)
+        if self.getY() < 150:
+            self.setY(150)
         
 class Bullet(Actor):
     def __init__(self):
